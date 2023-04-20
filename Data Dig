@@ -1,0 +1,88 @@
+--What are the NFL teams MAX, MIN, and AVG draft pick number?
+
+SELECT picked_by, MAX(pick_number) AS Max_pick
+FROM picks
+GROUP BY picked_by
+ORDER BY "Max_pick" asc;
+
+SELECT picked_by, MIN(pick_number) AS Min_pick
+FROM picks
+GROUP BY picked_by
+ORDER BY "Min_pick" asc;
+
+SELECT picked_by, AVG(pick_number) AS Avg_pick
+FROM picks
+GROUP BY Picked_by
+ORDER BY "Avg_pick" asc;
+
+
+--Whick RB's went in the first round of the draft?
+
+SELECT id, name, college, picked_by, position
+FROM picks
+GROUP BY name
+HAVING position = "RB"
+AND pick_number <=32
+ORDER BY id asc;
+
+
+--How many players went in each round of the draft?
+
+SELECT COUNT(*) AS Total,
+CASE
+WHEN pick_number <=32 THEN "First_round_draft_pick"
+WHEN pick_number <=64 THEN "Second_round_draft_pick"
+WHEN pick_number <=96 THEN "Third_round_draft_pick"
+WHEN pick_number <=128 THEN "Fourth_round_draft_pick"
+ELSE "Final_round_draft_pick"
+END AS "Round_Drafted"
+FROM picks
+GROUP BY Round_drafted
+ORDER BY total desc;
+
+
+--What players went in the First round of the draft. What colleges did those players attend? Which teams picked those players?
+
+SELECT pick_number, name, college, picked_by, position,
+CASE
+WHEN pick_number <=32 THEN "First_round_draft_pick"
+END AS "Draft_Round"
+FROM picks
+LIMIT 32;
+
+--How many QB were drafted? Who were they and when were they drafted?
+
+SELECT pick_number, name, position
+FROM picks
+GROUP BY name
+HAVING position ="QB"
+ORDER BY pick_number asc;
+
+
+
+--Which players were drafted to Greenbay? What position were those players?
+
+SELECT pick_number, name, position, picked_by
+FROM PICKS
+GROUP BY name
+HAVING picked_by = "Green Bay"
+ORDER BY pick_number asc;
+
+
+--Compare Oakland and San Francisco First and Second round picks in the draft.
+
+SELECT pick_number, name, college, picked_by, position
+FROM picks
+WHERE picked_by LIKE "Oakland"
+OR picked_by LIKE "%San Fran%"
+AND pick_number <=64;
+
+
+--What offensive players were drafted from Alabama.
+
+SELECT id, name, college, position
+FROM picks
+WHERE position IN ("QB", "WR", "TE", "RB", "OT", "C", "OG")
+AND college LIKE "alabama"
+GROUP BY position
+ORDER BY id asc;
