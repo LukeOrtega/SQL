@@ -1,0 +1,92 @@
+CREATE TABLE Famous_Athletes (id INTEGER PRIMARY KEY autoincrement, Name TEXT, Sport TEXT, Team TEXT);
+
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Lebron James', 'Basketball', 'Lakers');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Stephen Curry', 'Basketball', 'Warriors');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Michael Jordan', 'Basketball', 'Bulls');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Kobe Bryant', 'Basketball', 'Lakers');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Luka Doncic','Basketball', 'Mavericks');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Tom Brady', 'Football', 'Buccaneers');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Joe Burrow', 'Football', 'Bengals');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Josh Allen', 'Football', 'Bills');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Cooper Kupp', 'Football', 'Rams');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Travis Kelce', 'Football', 'Chiefs');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Aaron Judge', 'Baseball', 'Yankees');
+INSERT INTO famous_athletes (name, sport, team)
+VALUES ('Mike Trout', 'Baseball', 'Angels');
+
+CREATE TABLE Athlete_History (id INTEGER PRIMARY KEY autoincrement, athlete_id INTEGER, Age INTEGER, College TEXT, Birthplace TEXT);
+
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (1,38, 'none', 'Ohio');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (2,35, 'Davidson', 'Ohio');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (3,60, 'North Carolina', 'New York');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (4,42, 'none', 'Pennsylvania');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (5,24, 'none', 'Slovenia');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (6,45, 'Michigan', 'California');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (7,26, 'LSU', 'Idaho');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (8,26, 'Wyoming', 'California');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (9,29, 'WashintonState', 'Washington');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (10,33, 'Cincinatti','Ohio');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (11,31, 'Fresno State', 'California');
+INSERT INTO Athlete_history (athlete_id,age, college, birthplace) VALUES (12, 31, 'none', 'New Jersey');
+
+CREATE TABLE Athlete_Stats (id INTEGER PRIMARY KEY autoincrement, athlete_id INTEGER, Position TEXT, Years_played INTEGER, Championships INTEGER, MVP INTEGER);
+
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(1,'Foward',20,4,4);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(2, 'Guard', 14,4,2);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(3, 'Guard',15,6,5);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(4, 'Guard',20,5,4);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(5, 'Guard', 5,0,0);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(6, 'Quarterback', 23,7,3);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(7, 'Quarterback',3,0,0);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(8, 'Quarterback', 3,0,0);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(9, 'Receiver', 6, 1,0);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(10, 'Tight end', 10,2,0);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(11, 'Outfielder', 7, 0, 2);
+INSERT INTO Athlete_Stats (athlete_id, position, years_played, championships, MVP) VALUES(12, 'Centerfielder', 13, 0,3);
+
+**Which athletes have won a championship?**
+
+SELECT a.name, b.athlete_id, b.championships
+FROM famous_athletes a
+INNER JOIN athlete_stats b
+ON a.id=b.athlete_id
+WHERE b.championships >0
+ORDER BY championships desc;
+
+**Which athletes have been around the longest and which sport did they play?**
+
+SELECT a.name, a.sport, b.years_played
+FROM famous_athletes a
+JOIN athlete_stats b
+ON a.id=b.athlete_id
+ORDER BY years_played desc;
+
+**What are the total number of championships won by Football players, Basketball players, and Baseball players that are on the list? **
+
+SELECT sport,SUM(championships) AS 'Total Championships'
+FROM famous_athletes a
+JOIN athlete_stats b
+ON b.athlete_id=a.id
+GROUP BY sport;
+
+** Which athletes who were born in Ohio have won a championship? **
+
+SELECT a.name, a.sport, b.birthplace, c.championships
+FROM famous_athletes a
+JOIN athlete_history b
+ON a.id=b.athlete_id
+JOIN athlete_stats c
+ON b.athlete_id=c.athlete_id
+WHERE birthplace LIKE '%Ohio%'
+ORDER BY championships desc;
